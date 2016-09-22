@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
 	// advertise our topic of Bool messages.
 	// second arg is size of message buffer - overflow gets discarded.
 	detector.publisher = 
-		node.advertise<std_msgs::Bool>("robot_in_center", 1000);
+		node.advertise<std_msgs::Bool>("detector", 1000);
 
 	// our subscription to the walker.
 	// second arg is size of message buffer - overflow gets discarded.

@@ -57,6 +57,14 @@ Visualization Manager:
       Radius: 0.2
       Topic: /randomwalker
       Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /circle_indicator
+      Name: Marker
+      Namespaces:
+        circle_indicator: true
+      Queue Size: 100
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
