@@ -7,13 +7,14 @@ struct Detector
 {
 	ros::Publisher publisher;
 	bool prev_inside = false;
+	float radius = 1.0;
 
 	void callback(const geometry_msgs::PointStamped::ConstPtr &msg)
 	{
 		// compute the distance between the robot and the origin.
 		geometry_msgs::Point const &p = msg->point;
 		float dist = sqrt(p.x * p.x + p.y * p.y);
-		bool is_inside = dist < 1.0;
+		bool is_inside = dist < radius;
 
 		// send the message indicating if the robot is close to the origin.
 		std_msgs::Bool is_inside_msg;
@@ -40,6 +41,11 @@ int main(int argc, char *argv[])
 
 	// this node is "us".
 	ros::NodeHandle node;
+
+	bool ok = node.getParam("center_radius", detector.radius);
+	if (!ok) {
+		ROS_WARN("failed to get radius parameter.");
+	}
 
 	// advertise our topic of Bool messages.
 	// second arg is size of message buffer - overflow gets discarded.

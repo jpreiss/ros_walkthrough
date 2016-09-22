@@ -3,6 +3,7 @@
 #include "std_msgs/Bool.h"
 
 ros::Publisher publisher;
+float radius = 1.0;
 
 void callback(const std_msgs::Bool::ConstPtr &msg)
 {
@@ -21,8 +22,8 @@ void callback(const std_msgs::Bool::ConstPtr &msg)
 	marker.pose.position.x = 0;
 	marker.pose.position.y = 0;
 	marker.pose.position.z = 0;
-	marker.scale.x = 2.0; // diameter, not radius
-	marker.scale.y = 2.0; // diameter, not radius
+	marker.scale.x = radius * 2;
+	marker.scale.y = radius * 2;
 	marker.scale.z = 0.1;
 
 	// set the color according to whether a robot is in the center or not.
@@ -47,6 +48,11 @@ int main(int argc, char *argv[])
 {
 	ros::init(argc, argv, "circle_indicator");
 	ros::NodeHandle node;
+
+	bool ok = node.getParam("center_radius", radius);
+	if (!ok) {
+		ROS_WARN("failed to get radius parameter.");
+	}
 
 	// advertise our marker topic.
 	publisher = node.advertise<visualization_msgs::Marker>(
