@@ -1,5 +1,5 @@
 #include "ros/ros.h"
-#include "geometry_msgs/PointStamped.h"
+#include "geometry_msgs/PoseArray.h"
 #include "std_msgs/Bool.h"
 #include <cmath>
 
@@ -9,26 +9,33 @@ struct Detector
 	bool prev_inside = false;
 	float radius = 1.0;
 
-	void callback(const geometry_msgs::PointStamped::ConstPtr &msg)
+	void callback(const geometry_msgs::PoseArray::ConstPtr &msg)
 	{
-		// compute the distance between the robot and the origin.
-		geometry_msgs::Point const &p = msg->point;
-		float dist = sqrt(p.x * p.x + p.y * p.y);
-		bool is_inside = dist < radius;
+		bool any_inside = false;
+
+		for (auto &&pose : msg->poses) {
+			// compute the distance between the robot and the origin.
+			geometry_msgs::Point const &p = pose.position;
+			float dist = sqrt(p.x * p.x + p.y * p.y);
+			if (dist < radius) {
+				any_inside = true;
+				break;
+			}
+		}
 
 		// send the message indicating if the robot is close to the origin.
 		std_msgs::Bool is_inside_msg;
-		is_inside_msg.data = is_inside;
+		is_inside_msg.data = any_inside;
 		publisher.publish(is_inside_msg);
 
 		// log some info to the console.
-		if (!prev_inside && is_inside) {
+		if (!prev_inside && any_inside) {
 			ROS_INFO("robot entered the center.");
 		}
-		if (prev_inside && !is_inside) {
-			ROS_INFO("robot left the center.");
+		if (prev_inside && !any_inside) {
+			ROS_INFO("all robots left the center.");
 		}
-		prev_inside = is_inside;
+		prev_inside = any_inside;
 	}
 };
 
