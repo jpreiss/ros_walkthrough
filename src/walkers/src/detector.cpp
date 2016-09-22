@@ -1,11 +1,14 @@
 #include "ros/ros.h"
 #include "geometry_msgs/PoseArray.h"
 #include "std_msgs/Bool.h"
+#include "walkers/counter.h"
 #include <cmath>
 
 struct Detector
 {
 	ros::Publisher publisher;
+	ros::ServiceClient counter_client;
+
 	bool prev_inside = false;
 	float radius = 1.0;
 
@@ -31,6 +34,13 @@ struct Detector
 		// log some info to the console.
 		if (!prev_inside && any_inside) {
 			ROS_INFO("robot entered the center.");
+			walkers::counter service_call;
+			if (counter_client.call(service_call)) {
+				ROS_INFO("total center entries: %ld", service_call.response.total);
+			}
+			else {
+				ROS_WARN("failed to call counter service!");
+			}
 		}
 		if (prev_inside && !any_inside) {
 			ROS_INFO("all robots left the center.");
@@ -43,10 +53,7 @@ int main(int argc, char *argv[])
 {
 	Detector detector;
 
-	// initialize ROS system.
 	ros::init(argc, argv, "detector");
-
-	// this node is "us".
 	ros::NodeHandle node;
 
 	bool ok = node.getParam("center_radius", detector.radius);
@@ -59,16 +66,13 @@ int main(int argc, char *argv[])
 	detector.publisher = 
 		node.advertise<std_msgs::Bool>("detector", 1000);
 
-	// our subscription to the walker.
-	// second arg is size of message buffer - overflow gets discarded.
-	//
-	// note syntax for using an object method as a callback 
-	// instead of a free function.
-	//
+	// establish the handle to the service.
+	detector.counter_client = 
+		node.serviceClient<walkers::counter>("counter");
+
+	// subscribe to the walkers
 	ros::Subscriber subscription =
 		node.subscribe("randomwalker", 1000, &Detector::callback, &detector);
 
 	ros::spin();
-
-	// notice there's no loop rate!
 }

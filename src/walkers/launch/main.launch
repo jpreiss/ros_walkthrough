@@ -1,11 +1,13 @@
 <launch>
 	<node pkg="walkers" name="randomwalker" type="randomwalker"/>
 
-	<node pkg="walkers" name="detector" type="detector"/>
+	<node pkg="walkers" name="detector" type="detector" output="screen"/>
 
 	<node pkg="walkers" name="circle_indicator" type="circle_indicator"/>
 
-	<node pkg="walkers" name="planner" type="planner" output="screen"/>
+	<node pkg="walkers" name="planner" type="planner"/>
+
+	<node pkg="walkers" name="counter" type="counter"/>
 
 	<node pkg="rviz" name="rviz" type="rviz" args=" -d /home/james/course/multi/ros/catkin_ws/src/walkers/rviz_config.rviz"/>
 

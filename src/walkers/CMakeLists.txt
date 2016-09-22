@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  message_generation
 )
 
 find_package(OMPL)
@@ -56,11 +57,10 @@ find_package(OMPL)
 # )
 
 ## Generate services in the 'srv' folder
-# add_service_files(
-#   FILES
-#   Service1.srv
-#   Service2.srv
-# )
+add_service_files(
+  FILES
+  counter.srv
+)
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -70,10 +70,10 @@ find_package(OMPL)
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   geometry_msgs#   std_msgs
-# )
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -137,6 +137,7 @@ add_executable(randomwalker src/randomwalker.cpp)
 add_executable(detector src/detector.cpp)
 add_executable(circle_indicator src/circle_indicator.cpp)
 add_executable(planner src/planner.cpp)
+add_executable(counter src/counter.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
@@ -155,6 +156,9 @@ target_link_libraries(circle_indicator
 target_link_libraries(planner
   ${catkin_LIBRARIES}
   ompl
+)
+target_link_libraries(counter
+  ${catkin_LIBRARIES}
 )
 
 #############
