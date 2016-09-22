@@ -1,0 +1,8 @@
+<launch>
+	<node pkg="walkers" name="randomwalker" type="randomwalker"/>
+
+	<!-- output="screen" makes the ROS_INFO messages print to the console. -->
+	<node pkg="walkers" name="detector"     type="detector" output="screen"/>
+
+	<node pkg="rviz"    name="rviz"         type="rviz"        args=" -d /home/james/course/multi/ros/catkin_ws/src/walkers/rviz_config.rviz"/>
+</launch>
