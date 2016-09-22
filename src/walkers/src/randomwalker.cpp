@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 	// random number generator
 	std::random_device rd;
 	std::default_random_engine prng(rd());
-	std::normal_distribution<float> normal_dist(0, 0.01);
+	std::normal_distribution<float> normal_dist(0, 0.003);
 
 	int const N = 20;
 
@@ -37,11 +37,11 @@ int main(int argc, char *argv[])
 	while (ros::ok()) {
 		for (int i = 0; i < N; ++i) {
 			// damping
-			vx[i] *= 0.99;
-			vy[i] *= 0.99;
+			vx[i] *= 0.996;
+			vy[i] *= 0.996;
 			// attraction to origin
-			vx[i] -= 0.0005 * poses.poses[i].position.x;
-			vy[i] -= 0.0005 * poses.poses[i].position.y;
+			vx[i] -= 0.00017 * poses.poses[i].position.x;
+			vy[i] -= 0.00017 * poses.poses[i].position.y;
 			// random walking
 			vx[i] += normal_dist(prng);
 			vy[i] += normal_dist(prng);

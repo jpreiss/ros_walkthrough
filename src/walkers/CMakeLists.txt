@@ -13,6 +13,8 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
 )
 
+find_package(OMPL)
+
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
@@ -134,6 +136,7 @@ include_directories(
 add_executable(randomwalker src/randomwalker.cpp)
 add_executable(detector src/detector.cpp)
 add_executable(circle_indicator src/circle_indicator.cpp)
+add_executable(planner src/planner.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
@@ -148,6 +151,10 @@ target_link_libraries(detector
 )
 target_link_libraries(circle_indicator
   ${catkin_LIBRARIES}
+)
+target_link_libraries(planner
+  ${catkin_LIBRARIES}
+  ompl
 )
 
 #############
