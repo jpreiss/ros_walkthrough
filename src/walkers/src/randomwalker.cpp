@@ -46,6 +46,7 @@ int main(int argc, char *argv[])
 		position.point.y = position.point.y + vy;
 
 		// publish the message
+		position.header.stamp = ros::Time::now();
 		publisher.publish(position);
 		ros::spinOnce();
 
