@@ -132,6 +132,7 @@ include_directories(
 
 ## Declare a C++ executable
 add_executable(randomwalker src/randomwalker.cpp)
+add_executable(detector src/detector.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
@@ -139,6 +140,9 @@ add_executable(randomwalker src/randomwalker.cpp)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(randomwalker
+  ${catkin_LIBRARIES}
+)
+target_link_libraries(detector
   ${catkin_LIBRARIES}
 )
 
